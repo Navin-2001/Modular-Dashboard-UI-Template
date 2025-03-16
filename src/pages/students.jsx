@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Filter, Plus, Pencil } from "lucide-react";
+import { Search, Filter, Plus, Pencil, Trash, Eye } from "lucide-react";
 import { mockStudents } from "@/lib/mock-data";
 import { StudentFormDialog } from "@/components/student-form-dialog";
 
@@ -17,19 +17,29 @@ export function Students() {
   const [students, setStudents] = useState(mockStudents);
 
   const handleSaveStudent = (studentData) => {
-    // Check if the student already exists (edit operation)
     const existingStudentIndex = students.findIndex(
       (s) => s.id === studentData.id
     );
 
     if (existingStudentIndex >= 0) {
-      // Update existing student
       const updatedStudents = [...students];
       updatedStudents[existingStudentIndex] = studentData;
       setStudents(updatedStudents);
     } else {
-      // Add new student
       setStudents([...students, studentData]);
+    }
+  };
+
+  const handleDeleteStudent = (studentId) => {
+    setStudents(students.filter((student) => student.id !== studentId));
+  };
+
+  const handleViewStudent = (studentId) => {
+    const student = students.find((s) => s.id === studentId);
+    if (student) {
+      // Open a modal or navigate to a detailed view
+      console.log("Viewing student:", student);
+      // You can also set state to show a modal or detailed view
     }
   };
 
@@ -99,19 +109,42 @@ export function Students() {
                 </TableCell>
                 <TableCell>{student.enrollmentDate}</TableCell>
                 <TableCell className="text-right">
-                  <StudentFormDialog
-                    student={student}
-                    onSaveStudent={handleSaveStudent}
-                    triggerButton={
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="flex items-center"
-                      >
-                        <Pencil className="mr-1 h-3 w-3" /> Edit
-                      </Button>
-                    }
-                  />
+                  <div className="flex justify-end space-x-2">
+                    {/* View Button */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center text-blue-600 hover:text-blue-700"
+                      onClick={() => handleViewStudent(student.id)}
+                    >
+                      <Eye className="mr-1 h-3 w-3" /> View
+                    </Button>
+
+                    {/* Edit Button */}
+                    <StudentFormDialog
+                      student={student}
+                      onSaveStudent={handleSaveStudent}
+                      triggerButton={
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center"
+                        >
+                          <Pencil className="mr-1 h-3 w-3" /> Edit
+                        </Button>
+                      }
+                    />
+
+                    {/* Delete Button */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center text-red-600 hover:text-red-700"
+                      onClick={() => handleDeleteStudent(student.id)}
+                    >
+                      <Trash className="mr-1 h-3 w-3" /> Delete
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
