@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Filter, Plus, Pencil, Trash, Eye } from "lucide-react";
+import { Search, Filter, Plus, Pencil, Trash, Eye, Download } from "lucide-react";
 import { mockStudents } from "@/lib/mock-data";
 import { StudentFormDialog } from "@/components/student-form-dialog";
 
@@ -43,6 +43,11 @@ export function Students() {
     }
   };
 
+  const handleExport = () => {
+    // Implement export functionality here
+    console.log("Exporting data...");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -72,10 +77,16 @@ export function Students() {
             className="pl-9 max-w-md"
           />
         </div>
-        <Button variant="outline" className="flex items-center">
-          <Filter className="mr-2 h-4 w-4" />
-          Filters
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={handleExport}>
+            <Download className="mr-2 h-4 w-4" />
+            Export
+          </Button>
+          <Button variant="outline" className="flex items-center">
+            <Filter className="mr-2 h-4 w-4" />
+            Filters
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-lg border bg-white shadow">
