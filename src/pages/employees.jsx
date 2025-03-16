@@ -23,6 +23,8 @@ import {
   Users,
   Download,
   Pencil,
+  Trash,
+  Eye,
 } from "lucide-react";
 import { mockEmployees } from "@/lib/mock-data";
 import { EmployeeFormDialog } from "@/components/employee-form-dialog";
@@ -47,6 +49,20 @@ export function Employees() {
     } else {
       // Add new employee
       setEmployees([...employees, employeeData]);
+    }
+  };
+
+  // Handle deleting an employee
+  const handleDeleteEmployee = (employeeId) => {
+    setEmployees(employees.filter((emp) => emp.id !== employeeId));
+  };
+
+  // Handle viewing an employee
+  const handleViewEmployee = (employeeId) => {
+    const employee = employees.find((emp) => emp.id === employeeId);
+    if (employee) {
+      console.log("Viewing employee:", employee);
+      // You can open a modal or navigate to a detailed view here
     }
   };
 
@@ -222,9 +238,37 @@ export function Employees() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon">
-                      <Pencil className="h-4 w-4 text-gray-500" />
-                    </Button>
+                    <div className="flex justify-end space-x-2">
+                      {/* View Button */}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleViewEmployee(employee.id)}
+                      >
+                        <Eye className="h-4 w-4 text-blue-600" />
+                      </Button>
+
+                      {/* Edit Button */}
+                      <EmployeeFormDialog
+                        employee={employee}
+                        onSaveEmployee={handleSaveEmployee}
+                        departments={departments}
+                        triggerButton={
+                          <Button variant="ghost" size="icon">
+                            <Pencil className="h-4 w-4 text-gray-500" />
+                          </Button>
+                        }
+                      />
+
+                      {/* Delete Button */}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDeleteEmployee(employee.id)}
+                      >
+                        <Trash className="h-4 w-4 text-red-600" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
